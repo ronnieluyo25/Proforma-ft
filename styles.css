@@ -21,7 +21,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 /* === Exportable aislado y centrado === */
 .pdf-wrapper{display:flex;justify-content:center;align-items:flex-start;width:100%;background:#ffffff;padding:10px 0 40px}
 .pdf-narrow{
-  width:720px;                    /* ANCHO FIJO: ajusta aquí si quieres 690/700/750 */
+  width:720px;                    /* ANCHO FIJO */
   margin:0 auto;
   padding:20px 25px;
   background:#fff;
@@ -29,7 +29,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 }
 
 /* Tabla compacta */
-#exportArea .tbl{width:100%;border-collapse:collapse;table-layout:fixed}
+#exportArea .tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:20px;}
 #exportArea .tbl th,#exportArea .tbl td{
   padding:5px 6px;font-size:11px;border:1px solid var(--border);text-align:center;background:#fff
 }
@@ -40,8 +40,26 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 /* Título con respiro */
 #pdfHeader h2{line-height:1.9;margin-bottom:28px}
 
-/* Anti-cortes para html2pdf */
+/* === Sección Consideraciones === */
+#consideraciones{
+  margin-top:30px;
+  padding-top:14px;
+  border-top:1px solid #e5e7eb;
+  font-size:12px;
+  line-height:1.6;
+  color:#374151;
+}
+
+/* Proteger contra cortes en PDF */
 #exportArea *{break-inside:avoid}
-#consideraciones,#consideraciones *{page-break-inside:avoid !important;break-inside:avoid !important}
-#consideraciones{margin-top:14px}
+#consideraciones,
+#consideraciones *{
+  page-break-inside:avoid !important;
+  break-inside:avoid !important;
+}
 .html2pdf__page-break{height:0;page-break-before:always;break-before:page}
+
+/* Si ocupa más de una página, forzar salto limpio */
+@media print{
+  #consideraciones{page-break-after:auto;break-after:auto;}
+}
