@@ -132,7 +132,7 @@ function descargarPDF() {
   const area = document.getElementById('exportArea');
   if (!area) return;
 
-  // Forzar salto antes de "Consideraciones" para evitar cortes al final de página
+  // Forzar salto antes de "Consideraciones" para evitar cortes
   const cons = document.getElementById('consideraciones');
   let pageBreakEl = null;
   if (cons) {
@@ -145,20 +145,20 @@ function descargarPDF() {
   const alumnoSafe = String(alumnoSel).replace(/[\\/:*?"<>|]+/g, '_');
 
   const opt = {
-    margin: [10, 10, 10, 10],
+    margin: [10, 10, 12, 10],              // márgenes A4
     filename: `Proforma_${alumnoSafe}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: {
-      scale: 2,              // mejor nitidez
+      scale: 2,                            // nitidez
       useCORS: true,
       logging: false,
-      windowWidth: area.scrollWidth // evita recortes por overflow horizontal
+      // clave: captura con el ancho real del bloque angosto
+      windowWidth: area.offsetWidth
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'] } // reconoce .html2pdf__page-break y CSS
+    pagebreak: { mode: ['css', 'legacy'] }
   };
 
-  // Espera un frame para que el DOM calcule alturas antes de capturar
   requestAnimationFrame(() => {
     html2pdf().set(opt).from(area).save().then(() => {
       if (pageBreakEl && pageBreakEl.parentNode) pageBreakEl.parentNode.removeChild(pageBreakEl);
