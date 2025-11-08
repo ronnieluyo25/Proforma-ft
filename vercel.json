@@ -1,14 +1,35 @@
 {
-    "functions": {
-        "api/pdf.js": {
-            "runtime": "nodejs20.x",
-            "includeFiles": "templates/**",
-            "memory": 1024,
-            "maxDuration": 30
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/**/*.js",
+            "use": "@vercel/node"
         },
-        "api/*.js": {
-            "runtime": "nodejs20.x"
+        {
+            "src": "index.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "styles.css",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "script.js",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "templates/**/*",
+            "use": "@vercel/static"
         }
-    },
-    "cleanUrls": true
+    ],
+    "routes": [
+        {
+            "src": "/",
+            "dest": "/index.html"
+        },
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/$1.js"
+        }
+    ]
 }
