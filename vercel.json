@@ -2,33 +2,13 @@
     "functions": {
         "api/pdf.js": {
             "runtime": "nodejs20.x",
+            "includeFiles": "templates/**",
             "memory": 1024,
-            "maxDuration": 30,
-            "includeFiles": "templates/**"
+            "maxDuration": 30
         },
         "api/*.js": {
             "runtime": "nodejs20.x"
         }
     },
-    "headers": [
-        {
-            "source": "/",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "no-store"
-                }
-            ]
-        },
-        {
-            "source": "/index.html",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "no-store"
-                }
-            ]
-        }
-    ],
     "cleanUrls": true
 }
