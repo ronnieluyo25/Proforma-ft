@@ -1,4 +1,4 @@
-{"use strict";
+"use strict";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -61,4 +61,3 @@ window.addEventListener('DOMContentLoaded',async()=>{
   await cargarSelect('/api/alumnos',$('#alumno'));await cargarSelect('/api/tutores',$('#tutor'));
   $('#generarBtn').onclick=generarProforma;$('#pdfBtn').onclick=descargarPDF;
 });
-}
