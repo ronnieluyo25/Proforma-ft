@@ -1,4 +1,4 @@
-"use strict";
+{"use strict";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -42,7 +42,6 @@ function generarProforma(){
 function descargarPDF(){
   const area=document.getElementById('exportArea');
   const alumnoSel=document.getElementById('alumno')?.value||'Alumno';
-
   const opt={
     margin:[10,10,10,10],
     filename:`Proforma_${alumnoSel}.pdf`,
@@ -62,3 +61,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
   await cargarSelect('/api/alumnos',$('#alumno'));await cargarSelect('/api/tutores',$('#tutor'));
   $('#generarBtn').onclick=generarProforma;$('#pdfBtn').onclick=descargarPDF;
 });
+}

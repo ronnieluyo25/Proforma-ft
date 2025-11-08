@@ -32,19 +32,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 #exportArea .tbl th{background:#f1f5f9;font-weight:600}
 .tbl tfoot td{background:#f9fafb;font-weight:700;text-align:center}
 
-/* Columnas con ancho controlado (% editable) */
-#exportArea .tbl th:nth-child(1), #exportArea .tbl td:nth-child(1){ width:12%; }
-#exportArea .tbl th:nth-child(2), #exportArea .tbl td:nth-child(2){ width:10%; }
-#exportArea .tbl th:nth-child(3), #exportArea .tbl td:nth-child(3){ width:18%; }
-#exportArea .tbl th:nth-child(4), #exportArea .tbl td:nth-child(4){ width:15%; }
-#exportArea .tbl th:nth-child(5), #exportArea .tbl td:nth-child(5){ width:10%; }
-#exportArea .tbl th:nth-child(6), #exportArea .tbl td:nth-child(6){ width:15%; }
-#exportArea .tbl th:nth-child(7), #exportArea .tbl td:nth-child(7){ width:20%; }
-
 /* Título */
 #pdfHeader h2{line-height:1.8;margin-bottom:24px}
 
-/* Consideraciones: pegadas justo debajo de la tabla */
+/* Consideraciones: pegado justo debajo */
 #consideraciones{
   margin-top:8px;
   padding-top:8px;
@@ -52,17 +43,11 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
   font-size:12px;
   line-height:1.6;
   color:#374151;
-  page-break-before:auto !important;
-  page-break-after:auto !important;
-  break-before:auto !important;
-  break-after:auto !important;
 }
-#consideraciones *{
+
+/* Evitar cortes en PDF */
+#exportArea *{break-inside:avoid}
+#consideraciones,#consideraciones *{
   page-break-inside:avoid !important;
   break-inside:avoid !important;
-}
-.html2pdf__page-break{
-  height:0;
-  page-break-before:avoid !important;
-  break-before:avoid !important;
 }
