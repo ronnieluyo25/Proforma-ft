@@ -35,9 +35,15 @@ body {
 .btn-success  { background: #10b981; color: #fff; border-color: #10b981; }
 .btn.success.outline, .btn.outline { background: transparent; color: #10b981; border-color: #10b981; }
 
-/* Tabla (vista embebida en la web) */
+/* Tabla (vista embebida en la web / PDF cliente) */
 #exportArea .tbl { width:100%; table-layout:fixed; border-collapse:collapse; }
-#exportArea .tbl th, #exportArea .tbl td { padding: 5px 8px; text-align: center; border: 1px solid var(--border); background:#fff; font-size: 11px; }
+#exportArea .tbl th, #exportArea .tbl td {
+  padding: 5px 8px;
+  text-align: center;
+  border: 1px solid var(--border);
+  background:#fff;
+  font-size: 11px;
+}
 #exportArea .tbl th:nth-child(5),
 #exportArea .tbl th:nth-child(6),
 #exportArea .tbl th:nth-child(7),
@@ -50,3 +56,11 @@ body {
 
 /* Título del PDF embebido */
 #pdfHeader h2 { line-height: 1.8; margin-bottom: 30px; }
+
+/* === Anti-cortes para html2pdf === */
+#exportArea { background: #fff; position: relative; }
+#exportArea * { break-inside: avoid; }
+#consideraciones, #consideraciones * { page-break-inside: avoid; break-inside: avoid; }
+#consideraciones { margin-top: 16px; clear: both; }
+/* Clase reconocida por html2pdf para forzar salto */
+.html2pdf__page-break { height: 0; page-break-before: always; break-before: page; }

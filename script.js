@@ -129,8 +129,18 @@ function generarProforma() {
 
 /********** PDF (cliente con html2pdf.js) **********/
 function descargarPDF() {
-  const el = document.getElementById('exportArea');
-  if (!el) return;
+  const area = document.getElementById('exportArea');
+  if (!area) return;
+
+  // Forzar salto antes de "Consideraciones" para evitar cortes al final de página
+  const cons = document.getElementById('consideraciones');
+  let pageBreakEl = null;
+  if (cons) {
+    pageBreakEl = document.createElement('div');
+    pageBreakEl.className = 'html2pdf__page-break';
+    cons.parentNode.insertBefore(pageBreakEl, cons);
+  }
+
   const alumnoSel = document.getElementById('alumno')?.value || 'Alumno';
   const alumnoSafe = String(alumnoSel).replace(/[\\/:*?"<>|]+/g, '_');
 
@@ -138,10 +148,24 @@ function descargarPDF() {
     margin: [10, 10, 10, 10],
     filename: `Proforma_${alumnoSafe}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 1, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    html2canvas: {
+      scale: 2,              // mejor nitidez
+      useCORS: true,
+      logging: false,
+      windowWidth: area.scrollWidth // evita recortes por overflow horizontal
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] } // reconoce .html2pdf__page-break y CSS
   };
-  html2pdf().set(opt).from(el).save();
+
+  // Espera un frame para que el DOM calcule alturas antes de capturar
+  requestAnimationFrame(() => {
+    html2pdf().set(opt).from(area).save().then(() => {
+      if (pageBreakEl && pageBreakEl.parentNode) pageBreakEl.parentNode.removeChild(pageBreakEl);
+    }).catch(() => {
+      if (pageBreakEl && pageBreakEl.parentNode) pageBreakEl.parentNode.removeChild(pageBreakEl);
+    });
+  });
 }
 
 /********** PDF (servidor con /api/pdf) **********/
@@ -182,14 +206,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   $('#hoy').textContent = hoy.toLocaleDateString('es-PE', { day:'2-digit', month:'2-digit', year:'numeric' });
 
   const contDias = $('#dias');
-  ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"].forEach(d => {
+  DIAS.forEach(d => {
     const lbl = document.createElement('label');
     lbl.className = 'flex items-center gap-2 text-sm';
     lbl.innerHTML = `<input type="checkbox" class="accent-blue-600" value="${esc(d)}"> ${esc(d)}`;
     contDias.appendChild(lbl);
   });
 
-  const fi = $('#fechaInicio'); fi.valueAsDate = hoy;
+  const fi = $('#fechaInicio'); if (fi) fi.valueAsDate = hoy;
 
   await cargarSelect('/api/alumnos', $('#alumno'));
   await cargarSelect('/api/tutores', $('#tutor'));

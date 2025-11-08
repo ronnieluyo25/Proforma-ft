@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="es-PE">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Proforma - FriendTeacher</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- versión para evitar caché: cambia el número si no ves cambios -->
-  <link rel="stylesheet" href="styles.css?v=1" />
+  <!-- añade ?v=2 para evitar caché del navegador cuando actualices -->
+  <link rel="stylesheet" href="styles.css?v=2" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
@@ -15,8 +14,9 @@
   <div class="card mx-auto max-w-[1100px] px-4 py-6">
     <div class="flex flex-col items-center mb-6 space-y-3">
       <h1 class="text-2xl font-bold text-blue-700 tracking-wide text-center">
-        PROFORMA FRIENDTEACHER 2.0
+        PROFORMA FRIENDTEACHER
       </h1>
+
       <div class="bg-blue-50 border border-blue-300 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium shadow-sm">
         Fecha: <span id="hoy"></span>
       </div>
@@ -72,6 +72,7 @@
       <button id="pdfSrvBtn" class="btn btn-success outline" disabled>Descargar PDF (Diseño Pro)</button>
     </div>
 
+    <!-- ÁREA QUE SE EXPORTA EN EL PDF (Cliente) -->
     <div id="exportArea" class="hidden">
       <div id="pdfHeader" class="mb-4">
         <h2 class="text-xl font-extrabold text-center tracking-wide mb-2">PROFORMA DE CLASES</h2>
@@ -90,18 +91,28 @@
         </table>
       </div>
 
-      <div class="text-sm text-gray-700 leading-relaxed border-t border-gray-300 pt-4">
+      <!-- 📘 TEXTO ESTÁTICO DE CONSIDERACIONES -->
+      <div id="consideraciones" class="text-sm text-gray-700 leading-relaxed border-t border-gray-300 pt-4">
         <h3 class="font-bold text-blue-700 mb-1">Consideraciones</h3>
         <ol class="list-decimal pl-5 space-y-1">
-          <li>Para <strong>reservar las fechas</strong>, el <strong>pago debe efectuarse por adelantado</strong>.</li>
-          <li>Clases después de 9:00 p.m., fines de semana o feriados pueden tener <strong>tarifa diferenciada</strong>.
+          <li>
+            Para <strong>reservar las fechas indicadas</strong>, el <strong>pago deberá efectuarse por adelantado</strong>,
+            considerando el cierre del año académico y la alta demanda de horarios.
           </li>
-          <li>Reprogramaciones con <strong>48 horas de anticipación</strong>.</li>
+          <li>
+            Las clases programadas después de las 9:00 p.m., fines de semana o feriados estarán
+            <strong>sujetas a una tarifa diferenciada y a la disponibilidad del tutor.</strong>
+            Le agradeceremos consultar previamente para confirmar el monto y horario disponible.
+          </li>
+          <li>
+            Las reprogramaciones deberán <strong>solicitarse con 48 horas de anticipación</strong>; de lo contrario, las clases
+            canceladas sin causa de salud o emergencia se considerarán como <strong>realizadas.</strong>
+          </li>
         </ol>
       </div>
     </div>
   </div>
-  <script src="/script.js?v=1"></script>
-</body>
 
+  <script src="/script.js?v=2"></script>
+</body>
 </html>
