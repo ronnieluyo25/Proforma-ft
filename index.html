@@ -5,33 +5,43 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Proforma - FriendTeacher</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body class="bg-gray-100 leading-relaxed">
-  <div class="card mx-auto max-w-[1100px] px-4 py-6">
+  <div class="card mx-auto max-w-[1100px] px-4">
     <div class="flex flex-col items-center mb-6 space-y-3">
-      <h1 class="text-2xl font-bold text-blue-700 tracking-wide text-center">
-        PROFORMA FRIENDTEACHER
-      </h1>
+      <h1 class="text-2xl font-bold text-blue-700 tracking-wide text-center">PROFORMA FRIENDTEACHER</h1>
       <div class="bg-blue-50 border border-blue-300 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium shadow-sm">
         Fecha: <span id="hoy"></span>
       </div>
     </div>
 
-    <!-- Formulario -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
-      <div><label class="lbl">Alumno</label><select id="alumno" class="inp"></select></div>
-      <div><label class="lbl">N° Sesiones</label><input id="secciones" type="number" min="1" value="5" class="inp" /></div>
-      <div><label class="lbl">Fecha de Inicio</label><input id="fechaInicio" type="date" class="inp" /></div>
+      <div>
+        <label class="lbl">Alumno</label>
+        <select id="alumno" class="inp"></select>
+      </div>
+      <div>
+        <label class="lbl">N° Sesiones</label>
+        <input id="secciones" type="number" min="1" value="5" class="inp" />
+      </div>
+      <div>
+        <label class="lbl">Fecha de Inicio</label>
+        <input id="fechaInicio" type="date" class="inp" />
+      </div>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
       <div>
         <label class="lbl mb-1 block">Días</label>
         <div id="dias" class="flex flex-wrap gap-3"></div>
       </div>
-      <div><label class="lbl">Tutor</label><select id="tutor" class="inp"></select></div>
+      <div>
+        <label class="lbl">Tutor</label>
+        <select id="tutor" class="inp"></select>
+      </div>
       <div>
         <label class="lbl">Modalidad</label>
         <select id="modalidad" class="inp">
@@ -40,20 +50,24 @@
         </select>
       </div>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-      <div><label class="lbl">Horas por clase</label><input id="horasClase" type="number" step="0.25" value="1.5" class="inp" /></div>
-      <div><label class="lbl">Precio por hora (S/)</label><input id="precioHora" type="number" step="0.01" value="60" class="inp" /></div>
+      <div>
+        <label class="lbl">Horas por clase</label>
+        <input id="horasClase" type="number" step="0.25" value="1.5" class="inp" />
+      </div>
+      <div>
+        <label class="lbl">Precio por hora (S/)</label>
+        <input id="precioHora" type="number" step="0.01" value="60" class="inp" />
+      </div>
     </div>
 
-    <div class="flex flex-wrap gap-3 mb-6">
+    <div class="flex gap-3 mb-4">
       <button id="generarBtn" class="btn btn-primary">Generar Proforma</button>
-      <button id="pdfBtn" class="btn btn-success" disabled>Descargar PDF (Cliente)</button>
-      <button id="pdfSrvBtn" class="btn outline" disabled>Descargar PDF (Diseño Pro)</button>
+      <button id="pdfBtn" class="btn btn-success" disabled>Descargar PDF</button>
     </div>
-  </div>
 
-  <!-- BLOQUE EXPORTABLE AISLADO (para html2pdf) -->
-  <div class="pdf-wrapper">
+    <!-- 📘 Zona de exportación -->
     <div id="exportArea" class="hidden pdf-narrow">
       <div id="pdfHeader" class="mb-4">
         <h2 class="text-xl font-extrabold text-center tracking-wide mb-2">PROFORMA DE CLASES</h2>
@@ -66,24 +80,24 @@
 
       <div class="overflow-x-auto">
         <table id="tabla" class="tbl">
-          <!-- <colgroup> dinámico (porcentajes) se inyecta desde JS -->
           <thead></thead>
           <tbody></tbody>
           <tfoot></tfoot>
         </table>
       </div>
 
-      <div id="consideraciones" class="text-sm text-gray-700 leading-relaxed border-t border-gray-300 pt-4">
+      <!-- 📘 TEXTO ESTÁTICO DE CONSIDERACIONES -->
+      <div id="consideraciones" class="text-sm text-gray-700 leading-relaxed">
         <h3 class="font-bold text-blue-700 mb-1">Consideraciones</h3>
         <ol class="list-decimal pl-5 space-y-1">
-          <li>Para <strong>reservar las fechas indicadas</strong>, el <strong>pago deberá efectuarse por adelantado</strong>, considerando el cierre del año académico y la alta demanda de horarios.</li>
-          <li>Las clases programadas después de las 9:00 p.m., fines de semana o feriados estarán <strong>sujetas a una tarifa diferenciada y a la disponibilidad del tutor.</strong> Le agradeceremos consultar previamente para confirmar el monto y horario disponible.</li>
-          <li>Las reprogramaciones deberán <strong>solicitarse con 48 horas de anticipación</strong>; de lo contrario, las clases canceladas sin causa de salud o emergencia se considerarán como <strong>realizadas.</strong></li>
+          <li>Para <strong>reservar las fechas indicadas</strong>, el pago deberá efectuarse <strong>por adelantado</strong>, considerando la alta demanda de horarios.</li>
+          <li>Las clases programadas después de las 9:00 p.m., fines de semana o feriados estarán <strong>sujetas a una tarifa diferenciada</strong> y a la disponibilidad del tutor.</li>
+          <li>Las reprogramaciones deberán solicitarse con <strong>48 horas de anticipación</strong>; de lo contrario, las clases canceladas sin causa justificada se considerarán <strong>realizadas.</strong></li>
         </ol>
       </div>
     </div>
   </div>
 
-  <script src="/script.js?v=5"></script>
+  <script src="/script.js"></script>
 </body>
 </html>
