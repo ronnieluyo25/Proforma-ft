@@ -18,7 +18,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 .pdf-narrow{width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid #e5e7eb}
 
 /* === Tabla === */
-#exportArea .tbl{width:100%;border-collapse:collapse;margin-bottom:12px;table-layout:fixed}
+#exportArea .tbl{width:100%;border-collapse:collapse;margin-bottom:10px;table-layout:fixed}
 #exportArea .tbl th,#exportArea .tbl td{
   border:1px solid #d1d5db;
   padding:5px 6px;font-size:11px;text-align:center;
@@ -26,18 +26,30 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 #exportArea .tbl th{background:#f3f4f6;font-weight:600}
 .tbl tfoot td{background:#f9fafb;font-weight:700;text-align:center}
 
+/* Mantener juntos solo encabezado y totales */
+.no-break{break-inside:avoid !important;page-break-inside:avoid !important;}
+#tabla tfoot tr{break-inside:avoid !important;page-break-inside:avoid !important;}
+
 /* === Consideraciones === */
 .consideraciones-box{
-  border:1px solid #d1d5db;
+  border:1px solid #d9dbe1;     /* borde sutil */
   border-radius:6px;
-  padding:12px 14px;
+  padding:10px 12px;
   background:#fafafa;
   font-size:12px;
   line-height:1.6;
-  margin-top:8px;
+  margin-top:8px;                /* pegado a la tabla */
   text-align:justify;
+  page-break-before:auto !important; /* no fuerces salto antes */
+  page-break-after:auto !important;
+  break-before:auto !important;
+  break-after:auto !important;
+}
+/* Permitir que los ítems se partan si falta espacio: */
+#consideraciones ol,
+#consideraciones li{
+  break-inside:auto !important;
+  page-break-inside:auto !important;
 }
 
-/* === PDF anti-corte === */
-#exportArea *{break-inside:avoid !important;page-break-inside:avoid !important;}
-#consideraciones{display:block;break-inside:avoid !important;page-break-inside:avoid !important;}
+/* (Importante) NO usar anti-corte global; solo en elementos claves */

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Proforma - FriendTeacher</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
@@ -49,14 +49,14 @@
 
     <div class="flex flex-wrap gap-3 mb-6">
       <button id="generarBtn" class="btn btn-primary">Generar Proforma</button>
-      <button id="pdfBtn" class="btn btn-success" disabled>Descargar PDF</button>
+      <button id="pdfBtn" class="btn btn-success" disabled>Descargar PDF (Cliente)</button>
     </div>
   </div>
 
   <!-- BLOQUE EXPORTABLE -->
   <div class="pdf-wrapper">
     <div id="exportArea" class="hidden pdf-narrow">
-      <div id="pdfHeader" class="mb-4">
+      <div id="pdfHeader" class="mb-4 no-break">
         <h2 class="text-xl font-extrabold text-center tracking-wide mb-3">PROFORMA DE CLASES</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
           <div><strong>Alumno:</strong> <span id="phAlumno"></span></div>
@@ -71,7 +71,7 @@
 
       <!-- Bloque de Consideraciones -->
       <div id="consideraciones" class="consideraciones-box">
-        <h3 class="font-bold text-blue-700 mb-1 text-center">Consideraciones</h3>
+        <h3 class="font-bold text-blue-700 mb-1 text-center no-break">Consideraciones</h3>
         <ol class="list-decimal pl-5 space-y-1 text-justify">
           <li>Para <strong>reservar las fechas indicadas</strong>, el <strong>pago deberá efectuarse por adelantado</strong>, considerando el cierre del año académico y la alta demanda de horarios.</li>
           <li>Las clases programadas después de las 9:00 p.m., fines de semana o feriados estarán <strong>sujetas a una tarifa diferenciada y a la disponibilidad del tutor.</strong> Le agradeceremos consultar previamente para confirmar el monto y horario disponible.</li>
@@ -81,6 +81,6 @@
     </div>
   </div>
 
-  <script src="/script.js?v=7"></script>
+  <script src="/script.js?v=8"></script>
 </body>
 </html>
