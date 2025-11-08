@@ -1,43 +1,43 @@
-:root {
-  --bg:#f6f7fb; --card:#fff; --text:#1f2633; --muted:#6b7280; --border:#e5e7eb;
+:root{
+  --bg:#f6f7fb; --card:#fff; --text:#1f2633; --border:#e5e7eb;
   --primary:#0ea5e9; --radius:14px; --radius-sm:10px;
-  --shadow:0 6px 18px rgba(16,24,40,.08); --shadow-sm:0 2px 8px rgba(16,24,40,.08);
+  --shadow:0 6px 18px rgba(16,24,40,.08);
   --font: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,"Noto Sans";
 }
-*{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
 
-.lbl{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px;color:var(--muted)}
-.inp{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 10px;background:#fff}
-.btn{padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);cursor:pointer}
+.lbl{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px;color:#6b7280}
+.inp{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 10px}
+.btn{padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer}
 .btn-primary{background:var(--primary);color:#fff;border-color:var(--primary)}
 .btn-success{background:#10b981;color:#fff;border-color:#10b981}
 
-/* --- PDF AREA --- */
-.pdf-wrapper{display:flex;justify-content:center;align-items:flex-start;width:100%;background:#fff;padding:10px 0 40px}
-.pdf-narrow{width:720px;margin:0 auto;padding:20px 25px;background:#fff;border:1px solid #e5e7eb}
+/* === PDF LAYOUT === */
+.pdf-wrapper{display:flex;justify-content:center;width:100%;background:#fff;padding:20px 0 40px}
+.pdf-narrow{width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid #e5e7eb}
 
-/* --- Tabla --- */
-#exportArea .tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:12px}
+/* === Tabla === */
+#exportArea .tbl{width:100%;border-collapse:collapse;margin-bottom:12px;table-layout:fixed}
 #exportArea .tbl th,#exportArea .tbl td{
-  padding:5px 6px;font-size:11px;border:1px solid var(--border);text-align:center;
+  border:1px solid #d1d5db;
+  padding:5px 6px;font-size:11px;text-align:center;
 }
-#exportArea .tbl th{background:#f1f5f9;font-weight:600;color:var(--text)}
+#exportArea .tbl th{background:#f3f4f6;font-weight:600}
 .tbl tfoot td{background:#f9fafb;font-weight:700;text-align:center}
 
-/* --- Consideraciones --- */
+/* === Consideraciones === */
 .consideraciones-box{
-  border:1px solid #d1d5db;      /* borde sutil */
-  border-radius:8px;
-  padding:10px 14px;
-  margin-top:10px;
+  border:1px solid #d1d5db;
+  border-radius:6px;
+  padding:12px 14px;
   background:#fafafa;
   font-size:12px;
-  line-height:1.5;
+  line-height:1.6;
+  margin-top:8px;
   text-align:justify;
 }
 
-/* --- Anti-cortes PDF --- */
-#exportArea *{break-inside:avoid}
-#consideraciones,#consideraciones *{page-break-inside:avoid !important}
+/* === PDF anti-corte === */
+#exportArea *{break-inside:avoid !important;page-break-inside:avoid !important;}
+#consideraciones{display:block;break-inside:avoid !important;page-break-inside:avoid !important;}
