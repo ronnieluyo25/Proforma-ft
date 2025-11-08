@@ -1,23 +1,27 @@
 "use strict";
 
-/* ======== Helpers ======== */
-const $ = (s)=>document.querySelector(s);
-const $$= (s)=>Array.from(document.querySelectorAll(s));
-const esc = s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-const toDMY = d=>`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-const round2=n=>Math.round((Number(n||0)+Number.EPSILON)*100)/100;
-const toNum=v=>{const s=String(v??'').replace(/[^0-9.\-]/g,''); const n=parseFloat(s); return isNaN(n)?0:n;};
-const clampInt=(v,min,max)=>{v=parseInt(v,10); if(isNaN(v)) v=min; return Math.max(min,Math.min(max,v));};
-const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+/* ---------- Helpers ---------- */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                              .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const toDMY = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+const round2 = n => Math.round((Number(n||0)+Number.EPSILON)*100)/100;
+const toNum  = v => {const s=String(v??'').replace(/[^0-9.\-]/g,''); const n=parseFloat(s); return isNaN(n)?0:n;};
+const clampInt = (v,min,max) => {v=parseInt(v,10); if(isNaN(v)) v=min; return Math.max(min,Math.min(max,v));};
+const DIAS = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 
-/* ======== Estado global ======== */
+/* ---------- Estado ---------- */
 window.FILAS_ACTUALES = [];
 window.META_ACTUAL = { alumno:'', tutor:'', paquete:'' };
 
-/* Porcentajes de columnas (suman ~100) */
-let COL_WIDTHS = [16,12,20,16,10,12,14]; // [Fecha, Día, Tutor, Modalidad, Horas, Precio, Importe]
+/* ---------- Anchos de columnas (en %) ----------
+   Orden: [Fecha, Día, Tutor, Modalidad, Horas, Precio, Importe]
+   >> MODIFICA AQUÍ LOS PORCENTAJES <<
+*/
+const COL_WIDTHS = [16, 12, 20, 16, 10, 12, 14];
 
-/* ======== Cargar selects desde API ======== */
+/* ---------- Cargar selects ---------- */
 async function cargarSelect(url, selectEl, labelKey='nombre'){
   try{
     const res = await fetch(url,{cache:'no-store'});
@@ -30,21 +34,16 @@ async function cargarSelect(url, selectEl, labelKey='nombre'){
   }
 }
 
-/* ======== Construir <colgroup> por porcentajes ======== */
+/* ---------- Colgroup por porcentajes ---------- */
 function buildColgroup(colsPerc){
   const total = colsPerc.reduce((a,b)=>a+Number(b||0),0) || 1;
-  const norm = colsPerc.map(v=> (Number(v||0)/total*100));
+  const norm = colsPerc.map(v => Number(v||0)/total*100);
   return `<colgroup>${norm.map(p=>`<col style="width:${p.toFixed(3)}%;">`).join('')}</colgroup>`;
 }
 
-/* ======== Render tabla ======== */
+/* ---------- Render tabla ---------- */
 function renderDetalle(rows){
-  const table = $('#tabla');
-  const thead = $('#tabla thead');
-  const tbody = $('#tabla tbody');
-  const tfoot = $('#tabla tfoot');
-  if(!table || !thead || !tbody || !tfoot) return;
-
+  const table = $('#tabla'); if(!table) return;
   table.innerHTML = `${buildColgroup(COL_WIDTHS)}<thead></thead><tbody></tbody><tfoot></tfoot>`;
 
   $('#tabla thead').innerHTML = `
@@ -56,7 +55,7 @@ function renderDetalle(rows){
       <th class="text-right">Importe</th>
     </tr>`;
 
-  $('#tabla tbody').innerHTML = rows.map(r=>`
+  $('#tabla tbody').innerHTML = (window.FILAS_ACTUALES||[]).map(r=>`
     <tr>
       <td>${esc(r.fecha)}</td>
       <td>${esc(r.dia)}</td>
@@ -67,8 +66,8 @@ function renderDetalle(rows){
       <td class="text-right font-semibold">S/ ${Number(r.importe||0).toFixed(2)}</td>
     </tr>`).join('');
 
-  const totalHoras = rows.reduce((a,b)=>a+Number(b.horas||0),0);
-  const totalImporte = rows.reduce((a,b)=>a+Number(b.importe||0),0);
+  const totalHoras   = (window.FILAS_ACTUALES||[]).reduce((a,b)=>a+Number(b.horas||0),0);
+  const totalImporte = (window.FILAS_ACTUALES||[]).reduce((a,b)=>a+Number(b.importe||0),0);
   $('#tabla tfoot').innerHTML = `
     <tr>
       <td colspan="4" class="text-right font-semibold">TOTAL DE HORAS</td>
@@ -78,7 +77,7 @@ function renderDetalle(rows){
     </tr>`;
 }
 
-/* ======== Generar Proforma ======== */
+/* ---------- Generar proforma ---------- */
 function generarProforma(){
   const nSecciones = clampInt($('#secciones')?.value,1,500);
   const fechaStr   = $('#fechaInicio')?.value || '';
@@ -87,11 +86,13 @@ function generarProforma(){
   const modalidad  = $('#modalidad')?.value || '';
   const horasClase = toNum($('#horasClase')?.value);
   const precioHora = toNum($('#precioHora')?.value);
+
   const diasMarcados = $$('#dias input:checked').map(i=>i.value);
 
   const start = new Date(fechaStr);
-  const fechaValida = !isNaN(start.getTime());
-  if(!alumno || !tutor || !modalidad || !fechaValida || diasMarcados.length===0){ alert('Completa todos los campos y marca al menos un día.'); return; }
+  if(!alumno || !tutor || !modalidad || isNaN(start.getTime()) || !diasMarcados.length){
+    alert('Completa todos los campos, fecha válida y al menos un día.'); return;
+  }
   if(!(horasClase>0) || !(precioHora>=0)){ alert('Horas y precio deben ser válidos.'); return; }
 
   const filas=[];
@@ -119,12 +120,12 @@ function generarProforma(){
   $('#pdfSrvBtn').disabled= filas.length===0;
 }
 
-/* ======== PDF Cliente (html2pdf) ======== */
+/* ---------- PDF Cliente (html2pdf) ---------- */
 function descargarPDF(){
   const area = document.getElementById('exportArea');
   if(!area) return;
 
-  // salto limpio antes de Consideraciones si hiciera falta
+  // salto limpio antes de consideraciones
   const cons = document.getElementById('consideraciones');
   let pageBreakEl = null;
   if(cons){
@@ -136,17 +137,20 @@ function descargarPDF(){
   const alumnoSel = $('#alumno')?.value || 'Alumno';
   const alumnoSafe = String(alumnoSel).replace(/[\\/:*?"<>|]+/g,'_');
 
-  const width = area.offsetWidth; // clave: usar el ancho REAL del bloque angosto
+  // ANCHO FIJO DEL RENDER (igual a .pdf-narrow)
+  const width = 720;
+
   const opt = {
-    margin: [10,10,12,10],
+    margin: [10, 10, 12, 10],
     filename: `Proforma_${alumnoSafe}.pdf`,
     image: { type:'jpeg', quality:0.98 },
     html2canvas: {
       scale: 2,
       useCORS: true,
       logging: false,
-      windowWidth: width,
-      width      : width
+      windowWidth: width,  // fuerza el “viewport” del render
+      width: width,        // y el ancho del lienzo de captura
+      x: 0, y: 0
     },
     jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
     pagebreak: { mode:['css','legacy'] }
@@ -161,7 +165,7 @@ function descargarPDF(){
   });
 }
 
-/* ======== PDF Servidor (/api/pdf) ======== */
+/* ---------- PDF Servidor (/api/pdf) ---------- */
 async function descargarPDFServidor(){
   const { alumno, tutor, paquete } = window.META_ACTUAL || {};
   const filas = window.FILAS_ACTUALES || [];
@@ -185,31 +189,18 @@ async function descargarPDFServidor(){
   }
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download=`Proforma_${String(alumno||'Alumno').replace(/[\\/:*?"<>|]+/g,'_')}.pdf`;
+  const a=document.createElement('a');
+  a.href=url; a.download=`Proforma_${String(alumno||'Alumno').replace(/[\\/:*?"<>|]+/g,'_')}.pdf`;
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 }
 
-/* ======== Aplicar anchos de columnas desde inputs ======== */
-function aplicarColumnasDesdeUI(){
-  const vals = [$('#cw1'),$('#cw2'),$('#cw3'),$('#cw4'),$('#cw5'),$('#cw6'),$('#cw7')].map(i=> Number(i.value||0));
-  const sum = vals.reduce((a,b)=>a+(isNaN(b)?0:b),0);
-  const msg = $('#cwMsg');
-
-  if(sum <= 0){ msg.textContent='Valores inválidos.'; return; }
-  COL_WIDTHS = vals; // guardamos tal cual (normalizamos al render)
-  msg.textContent = `Aplicado. Suma: ${sum}% (se normaliza automáticamente a 100%).`;
-
-  // Re-render si ya hay filas
-  if(window.FILAS_ACTUALES?.length) renderDetalle(window.FILAS_ACTUALES);
-}
-
-/* ======== Init ======== */
+/* ---------- Init ---------- */
 window.addEventListener('DOMContentLoaded', async ()=>{
   const hoy = new Date();
   $('#hoy').textContent = hoy.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit',year:'numeric'});
 
   const contDias=$('#dias');
-  DIAS.forEach(d=>{
+  ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"].forEach(d=>{
     const lbl=document.createElement('label');
     lbl.className='flex items-center gap-2 text-sm';
     lbl.innerHTML=`<input type="checkbox" class="accent-blue-600" value="${esc(d)}"> ${esc(d)}`;
@@ -223,5 +214,4 @@ window.addEventListener('DOMContentLoaded', async ()=>{
   $('#generarBtn').addEventListener('click', generarProforma);
   $('#pdfBtn').addEventListener('click', descargarPDF);
   $('#pdfSrvBtn').addEventListener('click', descargarPDFServidor);
-  $('#aplicarWidths').addEventListener('click', aplicarColumnasDesdeUI);
 });
