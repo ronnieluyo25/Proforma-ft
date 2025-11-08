@@ -42,6 +42,7 @@ function generarProforma(){
 function descargarPDF(){
   const area=document.getElementById('exportArea');
   const alumnoSel=document.getElementById('alumno')?.value||'Alumno';
+
   const opt={
     margin:[10,10,10,10],
     filename:`Proforma_${alumnoSel}.pdf`,
