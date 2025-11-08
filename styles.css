@@ -29,7 +29,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 }
 
 /* Tabla compacta */
-#exportArea .tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:20px;}
+#exportArea .tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:12px;} /* <--- antes 20px */
 #exportArea .tbl th,#exportArea .tbl td{
   padding:5px 6px;font-size:11px;border:1px solid var(--border);text-align:center;background:#fff
 }
@@ -42,8 +42,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 
 /* === Sección Consideraciones === */
 #consideraciones{
-  margin-top:30px;
-  padding-top:14px;
+  margin-top:10px;                /* <--- más cerca de la tabla */
+  padding-top:10px;               /* <--- menos padding superior */
   border-top:1px solid #e5e7eb;
   font-size:12px;
   line-height:1.6;
