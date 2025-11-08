@@ -15,7 +15,14 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font)}
 
 /* === PDF LAYOUT === */
 .pdf-wrapper{display:flex;justify-content:center;width:100%;background:#fff;padding:20px 0 40px}
-.pdf-narrow{width:720px;margin:0 auto;padding:20px;background:#fff;border:1px solid #e5e7eb}
+.pdf-narrow{
+  width: 716px;           /* <- 190 mm ≈ 716 px */
+  margin: 0 auto;
+  padding: 20px;          /* usa padding, pero el ancho ya es el “útil” */
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box; /* que padding/borde no alteren el ancho exacto */
+}
 
 /* === Tabla === */
 #exportArea .tbl{width:100%;border-collapse:collapse;margin-bottom:10px;table-layout:fixed}

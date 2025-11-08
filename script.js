@@ -43,16 +43,27 @@ function generarProforma(){
 }
 
 function descargarPDF(){
-  const area=$('#exportArea');
-  // Asegurar captura completa y proporción correcta
-  const opt={
-    margin:[10,10,10,10],
-    filename:'Proforma_FriendTeacher.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,scrollY:0,windowWidth:720,width:720},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-    pagebreak:{mode:['css','legacy']}
+  const area = document.getElementById('exportArea');
+
+  // Ancho útil A4 con márgenes 10mm: 190 mm ≈ 716 px
+  const A4_INNER_PX = 716;
+
+  const opt = {
+    margin: [10, 10, 10, 10],               // 10 mm por lado (coincide con el cálculo)
+    filename: 'Proforma_FriendTeacher.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      scrollY: 0,
+      windowWidth: A4_INNER_PX,             // viewport de captura = ancho útil
+      width: A4_INNER_PX,                   // canvas de captura = ancho útil
+      x: 0, y: 0
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] }
   };
+
   html2pdf().set(opt).from(area).save();
 }
 
